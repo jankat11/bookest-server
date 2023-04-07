@@ -41,6 +41,9 @@ class BookShelf(models.Model):
 
     def __str__(self) -> str:
         return f"{self.owner.username}'s bookshelf"
+    
+    def iterable(self):
+      return {"will_be_read": self.will_be_read, "has_been_read": self.has_been_read}
 
 
 class OrderWillBeRead(models.Model):

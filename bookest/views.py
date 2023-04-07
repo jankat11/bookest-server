@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from .models import Book, BookShelf
 from rest_framework import status
 from .serializers import *
+from .helpers import *
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -20,7 +21,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         for key, value in serializer.items():
             data[key] = value
         return data
-
 
 
 class MyToken(TokenObtainPairView):
@@ -55,63 +55,28 @@ def register(request):
 @permission_classes([IsAuthenticated])
 def add_book(request):
     if request.method == "POST":
-      google_id = request.data["googleId"]
-      isbn = request.data["isbn"]
-      title = request.data["title"]
-      no_cover = request.data["noCover"]
-      will_be_read = request.data["willBeRead"]
-      has_been_read = request.data["hasBeenRead"]
-      if Book.objects.filter(google_id=google_id).all().count() == 0:
-          Book.objects.create(google_id=google_id, isbn=isbn,
-                              title=title, no_cover=no_cover)
-      if BookShelf.objects.filter(owner=request.user).all().count() == 0:
-          BookShelf.objects.create(owner=request.user)
-      book = Book.objects.get(google_id=google_id)
-      book_shelf = BookShelf.objects.get(owner=request.user)
-
-      if will_be_read:
-          try:
-              check = book_shelf.will_be_read.get(id=book.id)
-              if check is not None:
-                message = {"detail": "This book is already in 'will be read' shelf"}
+        data = get_book_credentials(request.data)
+        book, _ = Book.objects.get_or_create(google_id=data["id"], isbn=data["isbn"], title=data["title"], no_cover=data["cover"])
+        book_shelf, _ = BookShelf.objects.get_or_create(owner=request.user)
+        try:
+            check = book_shelf.iterable()[data["shelf"]].get(id=book.id)
+            if check is not None:
+                message = {"detail": f"This book is already in {data['shelf']} shelf"}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
-          except:
-              pass
-          try:
-              check = book_shelf.has_been_read.get(id=book.id)
-              if check is not None:
-                  book_shelf.has_been_read.remove(book)
-                  book_shelf.save()
-          except:
-              pass
-          book_shelf.will_be_read.add(book)
-          book_shelf.save()
-          serialized = book_serializer(book_shelf)
-          return JsonResponse(serialized)
-      elif has_been_read:
-          try:
-              check = book_shelf.has_been_read.get(id=book.id)
-              if check is not None:
-                  message = {"detail": "This book is already in 'has been read' shelf"}
-                  return Response(message, status=status.HTTP_400_BAD_REQUEST)
-          except:
-              pass
-          try:
-              check = book_shelf.will_be_read.get(id=book.id)
-              if check is not None:
-                  book_shelf.will_be_read.remove(book)
-                  book_shelf.save()
-          except:
-              pass
-          book_shelf.has_been_read.add(book)
-          book_shelf.save()
-          serialized = book_serializer(book_shelf)
-          return JsonResponse(serialized)
-    elif request.method == "GET":
-      return JsonResponse({
-          "hello": "world"
-      })
-
+        except:
+            pass
+        try:
+            check = book_shelf.iterable()[data["other_shelf"]].get(id=book.id)
+            if check is not None:
+                book_shelf.iterable()[data["other_shelf"]].remove(book)
+                book_shelf.save()
+        except:
+            pass
+        book_shelf.iterable()[data["shelf"]].add(book)
+        book_shelf.save()
+        serialized = book_serializer(book_shelf)
+        return JsonResponse(serialized)
+      
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])

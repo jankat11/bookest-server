@@ -88,7 +88,7 @@ def my_books(request):
 @permission_classes([IsAuthenticated])
 def remove_from_bookshelf(request, book_id):
     book_shelf = BookShelf.objects.get(owner=request.user)
-    book = Book.objects.get(pk=book_id)
+    book = Book.objects.get(google_id=book_id)
     try:
         book_shelf.will_be_read.remove(book)
     except:

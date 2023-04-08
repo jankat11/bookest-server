@@ -82,7 +82,7 @@ def add_book(request):
 @permission_classes([IsAuthenticated])
 def my_books(request):
     try:
-        book_shelf = BookShelf.objects.get_or_create(owner=request.user)
+        book_shelf, _ = BookShelf.objects.get_or_create(owner=request.user)
         serialized = book_serializer(book_shelf)
         return JsonResponse(serialized)
     except:

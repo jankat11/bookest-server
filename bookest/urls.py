@@ -7,5 +7,5 @@ urlpatterns = [
     path('users/register/', views.register ),
     path('users/mybooks/', views.my_books ),
     path("users/addbook/", views.add_book ),
-    path("removeBook/<str:book_id>", views.remove_from_bookshelf),
+    path("users/removeBook/<str:book_id>", views.remove_from_bookshelf),
 ]

@@ -27,12 +27,6 @@ class MyToken(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
-@api_view(["GET"])
-def index(request):
-    print("user is: ", request.user)
-    return Response({"message": "Hello, world!"})
-
-
 @api_view(["POST"])
 def register(request):
     if request.method == "POST":    
@@ -49,7 +43,6 @@ def register(request):
             message = {"detail": "User with this email already exists"}
             return Response(message, status=status.HTTP_400_BAD_REQUEST)
         
-
 
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
@@ -89,3 +82,21 @@ def my_books(request):
       return JsonResponse({
           "sorry": "unsuccessful"
       })
+    
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def remove_from_bookshelf(request, book_id):
+    book_shelf = BookShelf.objects.get(owner=request.user)
+    book = Book.objects.get(pk=book_id)
+    try:
+        book_shelf.will_be_read.remove(book)
+    except:
+        pass
+    try:
+        book_shelf.has_been_read.remove(book)
+    except:
+        pass
+    return JsonResponse({
+        "success": "the book removed successfully"
+    })

@@ -100,7 +100,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
     }
 } """
 
-DATABASE_URL = "postgresql://postgres:71da2xWdke9AneQlfNWw@containers-us-west-158.railway.app:7443/railway"
+DATABASE_URL = "postgresql://postgres:Qsiw96RaEBSWnrj9Hc9j@containers-us-west-19.railway.app:6838/railway"
 
 DATABASES = {
     "default": dj_database_url.config(default=DATABASE_URL),

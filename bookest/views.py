@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from django.contrib.auth.hashers import make_password
 from rest_framework.response import Response
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from rest_framework import status
 from .serializers import *
 from .models import *
@@ -102,13 +102,6 @@ def remove_from_bookshelf(request, book_id):
     })
 
 
-
-
-
-
-
-
-
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def my_reviews(request):
@@ -129,13 +122,6 @@ def my_reviews(request):
           message = {"detail": "could not get notes:("}
           return Response(message, status=status.HTTP_400_BAD_REQUEST)
       
-
-
-
-
-
-
-
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])

@@ -20,6 +20,9 @@ class Review(models.Model):
         Book, on_delete=models.CASCADE, related_name="reviews")
     time = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self) -> str:
+        return self.content
+    
     def serialize(self):
         return {
             "id": self.id,

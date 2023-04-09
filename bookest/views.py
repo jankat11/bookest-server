@@ -109,17 +109,32 @@ def remove_from_bookshelf(request, book_id):
 
 
 
-@api_view(["GET"])
+@api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def my_reviews(request):
-    user = request.user
-    reviews = sorted(user.reviews.all(),
-                     key=lambda review: review.time, reverse=True)
-    reviews_serialized = [review.serialize() for review in reviews]
-    return JsonResponse({
-        "reviews": reviews_serialized
-    })
+    if request.method == "POST":
+      try:
+          user = request.user
+          data = get_book_on_notes(request.data)
+          book, _ = Book.objects.get_or_create(google_id=data["id"], isbn=data["isbn"], title=data["title"], no_cover=data["cover"])
+          reviews = Review.objects.all().filter(owner=user, on_book=book)
+          reviews_sorted = sorted(reviews,
+                          key=lambda review: review.time, reverse=True)
+          reviews_serialized = [review.serialize()["content"] for review in reviews_sorted]
+          return JsonResponse({
+              "reviews": reviews_serialized
+          })
+      except:
+          message = {"detail": "could not get notes:("}
+          return Response(message, status=status.HTTP_400_BAD_REQUEST)
+      
 
+
+
+
+
+
+      
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])

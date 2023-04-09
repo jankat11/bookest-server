@@ -120,7 +120,8 @@ def my_reviews(request):
           reviews = Review.objects.all().filter(owner=user, on_book=book)
           reviews_sorted = sorted(reviews,
                           key=lambda review: review.time, reverse=True)
-          reviews_serialized = [review.serialize()["content"] for review in reviews_sorted]
+          print(reviews_sorted)
+          reviews_serialized = [review.serialize() for review in reviews_sorted]
           return JsonResponse({
               "reviews": reviews_serialized
           })
@@ -134,7 +135,7 @@ def my_reviews(request):
 
 
 
-      
+
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])

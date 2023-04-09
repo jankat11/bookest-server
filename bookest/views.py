@@ -137,7 +137,7 @@ def add_review(request):
             })
         except:
           return JsonResponse({
-            "sorry": "unsuccessful"
+            "sorry": " note adding is unsuccessful"
           })
 
 

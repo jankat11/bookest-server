@@ -15,3 +15,18 @@ def get_book_credentials(data):
         "shelf":shelf, 
         "other_shelf": other_shelf
     }
+
+
+def get_review_credentials(data):
+    google_id = data["googleId"]
+    isbn = data["isbn"]
+    title = data["title"]
+    no_cover = data["noCover"]
+    content = data["content"]
+    return {
+        "id":google_id,
+        "isbn":isbn, 
+        "title":title, 
+        "cover":no_cover, 
+        "content": content
+    }

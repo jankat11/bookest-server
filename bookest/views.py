@@ -7,9 +7,9 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, JsonResponse
-from .models import Book, BookShelf
 from rest_framework import status
 from .serializers import *
+from .models import *
 from .helpers import *
 
 
@@ -99,4 +99,48 @@ def remove_from_bookshelf(request, book_id):
         pass
     return JsonResponse({
         "success": "the book removed successfully"
+    })
+
+
+
+
+
+
+
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def my_reviews(request):
+    user = request.user
+    reviews = sorted(user.reviews.all(),
+                     key=lambda review: review.time, reverse=True)
+    reviews_serialized = [review.serialize() for review in reviews]
+    return JsonResponse({
+        "reviews": reviews_serialized
+    })
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def add_review(request):
+    if request.method == "POST":
+        user = request.user
+        data = get_review_credentials(request.data)
+        book, _ = Book.objects.get_or_create(google_id=data["id"], isbn=data["isbn"], title=data["title"], no_cover=data["cover"])
+        content = request.data["review"].replace("\n", "<br>")
+        Review.objects.create(owner=user, on_book=book, content=content)
+        return JsonResponse({
+            "result":  "your note was successfully added"
+        })
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def delete_review(request, review_id):
+    review = Review.objects.get(id=int(review_id))
+    if request.user == review.owner:
+        review.delete()
+    return JsonResponse({
+        "success": "the review deleted successfully"
     })

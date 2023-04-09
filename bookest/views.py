@@ -128,7 +128,6 @@ def add_review(request):
         try:
             user = request.user
             data = get_review_credentials(request.data)
-
             book, _ = Book.objects.get_or_create(google_id=data["id"], isbn=data["isbn"], title=data["title"], no_cover=data["cover"])
             content = request.data["content"].replace("\n", "<br>")
             Review.objects.create(owner=user, on_book=book, content=content)
@@ -136,9 +135,8 @@ def add_review(request):
                 "result":  "your note was successfully added"
             })
         except:
-          return JsonResponse({
-            "errorMessage": "something went wrong:( try later"
-          })
+            message = "something went wrong:( try later"
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["GET"])

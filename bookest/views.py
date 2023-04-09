@@ -135,7 +135,7 @@ def add_review(request):
                 "result":  "your note was successfully added"
             })
         except:
-            message = "something went wrong:( try later"
+            message = {"detail": "something went wrong:( try later"}
             return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 

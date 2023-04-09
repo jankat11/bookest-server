@@ -130,7 +130,7 @@ def add_review(request):
             data = get_review_credentials(request.data)
 
             book, _ = Book.objects.get_or_create(google_id=data["id"], isbn=data["isbn"], title=data["title"], no_cover=data["cover"])
-            content = request.data["review"].replace("\n", "<br>")
+            content = request.data["content"].replace("\n", "<br>")
             Review.objects.create(owner=user, on_book=book, content=content)
             return JsonResponse({
                 "result":  "your note was successfully added"

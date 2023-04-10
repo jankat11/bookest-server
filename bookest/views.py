@@ -53,7 +53,7 @@ def add_book(request):
             google_id=data["id"], isbn=data["isbn"], title=data["title"], no_cover=data["cover"])
         book_shelf, _ = BookShelf.objects.get_or_create(owner=request.user)
         try:
-            check = book_shelf.iterable()[data["shelf"]].get(id=book.id)
+            check = book_shelf.serialize()[data["shelf"]].get(id=book.id)
             if check is not None:
                 message = {
                     "detail": f"This book is already in {data['shelf']} shelf"}
@@ -61,13 +61,13 @@ def add_book(request):
         except:
             pass
         try:
-            check = book_shelf.iterable()[data["other_shelf"]].get(id=book.id)
+            check = book_shelf.serialize()[data["other_shelf"]].get(id=book.id)
             if check is not None:
-                book_shelf.iterable()[data["other_shelf"]].remove(book)
+                book_shelf.serialize()[data["other_shelf"]].remove(book)
                 book_shelf.save()
         except:
             pass
-        book_shelf.iterable()[data["shelf"]].add(book)
+        book_shelf.serialize()[data["shelf"]].add(book)
         book_shelf.save()
         serialized = book_serializer(book_shelf)
         return JsonResponse(serialized)

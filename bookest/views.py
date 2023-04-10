@@ -146,12 +146,17 @@ def add_review(request):
             return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(["GET"])
+@api_view(["POST"])
 @permission_classes([IsAuthenticated])
-def delete_review(request, review_id):
-    review = Review.objects.get(id=int(review_id))
-    if request.user == review.owner:
-        review.delete()
-    return JsonResponse({
-        "success": "the review deleted successfully"
-    })
+def delete_review(request):
+    if request.method == "POST":
+      try:
+          note_id = request.data.noteId
+          review = Review.objects.get(_id=note_id, owner=request.user)
+          review.delete()
+          return JsonResponse({
+              "success": "the note deleted successfully"
+          })
+      except: 
+          message = {"detail": "something went wrong:( try later"}
+          return Response(message, status=status.HTTP_400_BAD_REQUEST)

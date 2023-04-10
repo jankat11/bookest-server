@@ -17,7 +17,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
         serializer = UserSerializerWithToken(self.user).data
-        print(serializer.items())
         for key, value in serializer.items():
             data[key] = value
         return data
@@ -116,7 +115,6 @@ def my_reviews(request):
             reviews = Review.objects.all().filter(owner=user, on_book=book)
             reviews_sorted = sorted(reviews,
                                     key=lambda review: review.time, reverse=True)
-            print(reviews_sorted)
             reviews_serialized = [review.serialize() for review in reviews_sorted]
             return JsonResponse({
                 "reviews": reviews_serialized
@@ -150,13 +148,13 @@ def add_review(request):
 @permission_classes([IsAuthenticated])
 def delete_review(request):
     if request.method == "POST":
-      try:
-          note_id = request.data.noteId
-          review = Review.objects.get(_id=note_id, owner=request.user)
-          review.delete()
-          return JsonResponse({
-              "success": "the note deleted successfully"
-          })
-      except: 
-          message = {"detail": "something went wrong:( try later"}
-          return Response(message, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            note_id = request.data["noteId"]
+            review = Review.objects.get(_id=note_id, owner=request.user)
+            review.delete()
+            return JsonResponse({
+                "success": "the note deleted successfully"
+            })
+        except: 
+            message = {"detail": "something went wrong:( try later"}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)

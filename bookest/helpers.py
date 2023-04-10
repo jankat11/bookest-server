@@ -31,6 +31,7 @@ def get_review_credentials(data):
         "content": content
     }
 
+
 def get_book_on_notes(data):
     google_id = data["googleId"]
     isbn = data["isbn"]

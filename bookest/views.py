@@ -117,8 +117,7 @@ def my_reviews(request):
             reviews_sorted = sorted(reviews,
                                     key=lambda review: review.time, reverse=True)
             print(reviews_sorted)
-            reviews_serialized = [{ "_id": review.serialize()["_id"], "owner": review.serialize()["owner"], "on_book": review.serialize(
-            )["on_book"], "content": review.serialize()["content"]} for review in reviews_sorted]
+            reviews_serialized = [review.serialize() for review in reviews_sorted]
             return JsonResponse({
                 "reviews": reviews_serialized
             })

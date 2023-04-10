@@ -13,6 +13,7 @@ class Book(models.Model):
 
 
 class Review(models.Model):
+    _id = models.CharField(max_length=200)
     content = models.TextField(max_length=2500)
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="reviews")
@@ -22,7 +23,7 @@ class Review(models.Model):
 
     def __str__(self) -> str:
         return self.content
-    
+
     def serialize(self):
         return {
             "id": self.id,
@@ -44,9 +45,9 @@ class BookShelf(models.Model):
 
     def __str__(self) -> str:
         return f"{self.owner.username}'s bookshelf"
-    
+
     def iterable(self):
-      return {"will_be_read": self.will_be_read, "has_been_read": self.has_been_read}
+        return {"will_be_read": self.will_be_read, "has_been_read": self.has_been_read}
 
 
 class OrderWillBeRead(models.Model):

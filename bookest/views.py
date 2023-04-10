@@ -29,7 +29,7 @@ class MyToken(TokenObtainPairView):
 
 @api_view(["POST"])
 def register(request):
-    if request.method == "POST":    
+    if request.method == "POST":
         data = request.data
         try:
             user = User.objects.create(
@@ -42,19 +42,21 @@ def register(request):
         except:
             message = {"detail": "User with this email already exists"}
             return Response(message, status=status.HTTP_400_BAD_REQUEST)
-        
+
 
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
 def add_book(request):
     if request.method == "POST":
         data = get_book_credentials(request.data)
-        book, _ = Book.objects.get_or_create(google_id=data["id"], isbn=data["isbn"], title=data["title"], no_cover=data["cover"])
+        book, _ = Book.objects.get_or_create(
+            google_id=data["id"], isbn=data["isbn"], title=data["title"], no_cover=data["cover"])
         book_shelf, _ = BookShelf.objects.get_or_create(owner=request.user)
         try:
             check = book_shelf.iterable()[data["shelf"]].get(id=book.id)
             if check is not None:
-                message = {"detail": f"This book is already in {data['shelf']} shelf"}
+                message = {
+                    "detail": f"This book is already in {data['shelf']} shelf"}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
         except:
             pass
@@ -69,7 +71,7 @@ def add_book(request):
         book_shelf.save()
         serialized = book_serializer(book_shelf)
         return JsonResponse(serialized)
-      
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -79,10 +81,10 @@ def my_books(request):
         serialized = book_serializer(book_shelf)
         return JsonResponse(serialized)
     except:
-      return JsonResponse({
-          "sorry": "unsuccessful"
-      })
-    
+        return JsonResponse({
+            "sorry": "unsuccessful"
+        })
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -106,22 +108,24 @@ def remove_from_bookshelf(request, book_id):
 @permission_classes([IsAuthenticated])
 def my_reviews(request):
     if request.method == "POST":
-      try:
-          user = request.user
-          data = get_book_on_notes(request.data)
-          book, _ = Book.objects.get_or_create(google_id=data["id"], isbn=data["isbn"], title=data["title"], no_cover=data["cover"])
-          reviews = Review.objects.all().filter(owner=user, on_book=book)
-          reviews_sorted = sorted(reviews,
-                          key=lambda review: review.time, reverse=True)
-          print(reviews_sorted)
-          reviews_serialized = [{"owner": review.serialize()["owner"], "on_book": review.serialize()["on_book"], "content": review.serialize()["content"]} for review in reviews_sorted]
-          return JsonResponse({
-              "reviews": reviews_serialized
-          })
-      except:
-          message = {"detail": "could not get notes:("}
-          return Response(message, status=status.HTTP_400_BAD_REQUEST)
-      
+        try:
+            user = request.user
+            data = get_book_on_notes(request.data)
+            book, _ = Book.objects.get_or_create(
+                google_id=data["id"], isbn=data["isbn"], title=data["title"], no_cover=data["cover"])
+            reviews = Review.objects.all().filter(owner=user, on_book=book)
+            reviews_sorted = sorted(reviews,
+                                    key=lambda review: review.time, reverse=True)
+            print(reviews_sorted)
+            reviews_serialized = [{"owner": review.serialize()["owner"], "on_book": review.serialize(
+            )["on_book"], "content": review.serialize()["content"]} for review in reviews_sorted]
+            return JsonResponse({
+                "reviews": reviews_serialized
+            })
+        except:
+            message = {"detail": "could not get notes:("}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -130,9 +134,11 @@ def add_review(request):
         try:
             user = request.user
             data = get_review_credentials(request.data)
-            book, _ = Book.objects.get_or_create(google_id=data["id"], isbn=data["isbn"], title=data["title"], no_cover=data["cover"])
-            content = request.data["content"].replace("\n", "<br>")
-            Review.objects.create(owner=user, on_book=book, content=content)
+            book, _ = Book.objects.get_or_create(
+                google_id=data["id"], isbn=data["isbn"], title=data["title"], no_cover=data["cover"])
+            content = data["content"].replace("\n", "<br>")
+            _id = data["_id"]
+            Review.objects.create(owner=user, on_book=book, content=content, _id=_id)
             return JsonResponse({
                 "result":  "your note was successfully added"
             })

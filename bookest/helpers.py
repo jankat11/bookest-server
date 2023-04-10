@@ -23,12 +23,14 @@ def get_review_credentials(data):
     title = data["title"]
     no_cover = data["noCover"]
     content = data["content"]
+    _id = data["_id"]
     return {
         "id":google_id,
         "isbn":isbn, 
         "title":title, 
         "cover":no_cover, 
-        "content": content
+        "content": content,
+        "_id" : _id
     }
 
 

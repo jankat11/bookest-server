@@ -27,6 +27,7 @@ class Review(models.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "_id": self._id,
             "content": self.content,
             "owner": self.owner.username,
             "on_book": self.on_book.google_id,

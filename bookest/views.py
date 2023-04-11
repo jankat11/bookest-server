@@ -78,7 +78,9 @@ def my_books(request):
     try:
         book_shelf, _ = BookShelf.objects.get_or_create(owner=request.user)
         serialized = book_serializer(book_shelf)
-        return JsonResponse(serialized)
+        return JsonResponse({
+          "mainShelf":  serialized
+        })
     except:
         return JsonResponse({
             "sorry": "unsuccessful"

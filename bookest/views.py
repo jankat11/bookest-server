@@ -79,6 +79,7 @@ def my_books(request):
         book_shelf, _ = BookShelf.objects.get_or_create(owner=request.user)
         serialized = book_serializer(book_shelf)
         users_reviews = request.user.reviews.all()
+        users_reviews = sorted(users_reviews, key=lambda review: review.time)
         noted_books = [review.on_book.serialize() for review in users_reviews]
         return JsonResponse({
           "mainShelf":  serialized,

@@ -10,7 +10,14 @@ class Book(models.Model):
 
     def __str__(self) -> str:
         return self.title
-
+    
+    def serialize(self): 
+        return {
+            "title": self.title,
+            "id": self.google_id,
+            "no_cover": self.no_cover
+        }
+        
 
 class Review(models.Model):
     _id = models.CharField(max_length=200)

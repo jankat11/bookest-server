@@ -78,12 +78,16 @@ def my_books(request):
     try:
         book_shelf, _ = BookShelf.objects.get_or_create(owner=request.user)
         serialized = book_serializer(book_shelf)
+        users_reviews = request.user.reviews.all()
+        noted_books = [review.on_book.serialize() for review in users_reviews]
         return JsonResponse({
-          "mainShelf":  serialized
+          "mainShelf":  serialized,
+          "notedBooks": noted_books
         })
     except:
         return JsonResponse({
-            "sorry": "unsuccessful"
+            "sorry": "unsuccessful",
+            
         })
 
 

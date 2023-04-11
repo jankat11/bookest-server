@@ -82,7 +82,7 @@ def my_books(request):
         noted_books = [review.on_book.serialize() for review in users_reviews]
         return JsonResponse({
           "mainShelf":  serialized,
-          "notedBooks": noted_books
+          "noted_books": noted_books
         })
     except:
         return JsonResponse({

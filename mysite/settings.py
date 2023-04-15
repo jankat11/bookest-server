@@ -93,7 +93,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'https://bookest-server.up.railway.app/
 # Define SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE to get extra permissions from Google.
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://www.googleapis.com/auth/userinfo.email',
-    'https://www.googleapis.com/auth/userinfo.profile',
+    """ 'https://www.googleapis.com/auth/userinfo.profile', """
 ]
 
 OAUTH2_PROVIDER = {

@@ -75,7 +75,7 @@ AUTHENTICATION_BACKENDS = (
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "567487559274-4kmrb337m167lvpsc9j7ja89lm1rkek9.apps.googleusercontent.com"
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
-
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'https://bookest-server.up.railway.app/auth/convert-token'
 
 # Define SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE to get extra permissions from Google.
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [

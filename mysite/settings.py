@@ -42,21 +42,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social_django',
     'bookest',
     "corsheaders",
     'rest_framework',
     # OAuth
-    'oauth2_provider',
-    'social_django',
-    'rest_framework_social_oauth2',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
                 # OAuth
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication', 
-        'drf_social_oauth2.authentication.SocialAuthentication',
+
     )
 }
 
@@ -69,8 +66,7 @@ AUTHENTICATION_BACKENDS = (
     # Google OAuth2
     'social_core.backends.google.GoogleOAuth2',
 
-    # drf-social-oauth2
-    'drf_social_oauth2.backends.DjangoOAuth2',
+
 
     # Django
     'django.contrib.auth.backends.ModelBackend',

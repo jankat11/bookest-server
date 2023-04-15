@@ -13,39 +13,60 @@ from .models import *
 from .helpers import *
 import google.auth
 from google.oauth2 import id_token
-from google.auth.transport import requests
+import requests
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.conf import settings
 import jwt
+import json
 
 @api_view(['POST'])
 def google_callback(request):
-    token = request.data.get('token')
-    print(f'token: {token}')  # Add this line to log the token value
+    if request.method == 'POST':
+        token = request.data.get('token')
+        if token:
+            user_data = get_user(token)
+            print("user_data is: ", user_data)
+            if user_data and user_data['aud'] == "567487559274-4kmrb337m167lvpsc9j7ja89lm1rkek9.apps.googleusercontent.com":
+                # User is authenticated, create JWT token
 
-    try:
-        idinfo = id_token.verify_oauth2_token(token, requests.Request(), "567487559274-4kmrb337m167lvpsc9j7ja89lm1rkek9.apps.googleusercontent.com")
-        print("idinfo is: ",idinfo)
-        email = idinfo['email']
+                user_id = user_data['sub']
+                username = user_data['email']
+                email = user_data['email']
+              
+                print("username is: ", username, "email is: ", email)
+                user, _ = User.objects.get_or_create(username=username,email=email)
+                  
+                  
+                serializer = UserSerializerWithToken(user, many=False)
+                return Response(serializer.data)
+                
+            else:
+                return JsonResponse({'error': 'Invalid token or client ID'})
+        else:
+            return JsonResponse({'error': 'Token not provided'})
 
-        # Check if the user with this email already exists in your database
-        # If not, create a new user and save it to your database
 
-        # Generate a JWT token for the user
-        jwt_token = jwt.encode({'email': email}, 'django-insecure-rc^*w^w&6g9_(uvx#6s*bnt!w)l0rdi%!l7mv#y%uc&x%wo5pk')
 
-        return Response({'token': jwt_token})
-    except ValueError:
-        return Response(status=400)
+      
+
+def get_user(token):
+    response = requests.get(f"https://www.googleapis.com/oauth2/v3/tokeninfo?access_token={token}")
+    if response.status_code == 200:
+        user_data = json.loads(response.content)
+        return user_data
+    else:
+        return None
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
         serializer = UserSerializerWithToken(self.user).data
+        
         for key, value in serializer.items():
             data[key] = value
+        print("password is ", data["password"])
         return data
 
 
@@ -57,11 +78,14 @@ class MyToken(TokenObtainPairView):
 def register(request):
     if request.method == "POST":
         data = request.data
+        if not data["password"] or len(data["password"]) == 0:
+            message = {"detail": "invalid password"}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
         try:
             user = User.objects.create(
                 username=data["email"],
                 email=data["email"],
-                password=make_password(data["password"])
+                password=make_password(data["password"])              
             )
             serializer = UserSerializerWithToken(user, many=False)
             return Response(serializer.data)
@@ -192,4 +216,10 @@ def delete_review(request):
         except: 
             message = {"detail": "something went wrong:( try later"}
             return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+
 

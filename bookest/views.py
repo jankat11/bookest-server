@@ -11,6 +11,31 @@ from rest_framework import status
 from .serializers import *
 from .models import *
 from .helpers import *
+import google.auth
+from google.oauth2 import id_token
+from google.auth.transport import requests
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.conf import settings
+import jwt
+
+@api_view(['POST'])
+def google_callback(request):
+    token = request.data.get('token')
+
+    try:
+        idinfo = id_token.verify_oauth2_token(token, requests.Request(), settings.GOOGLE_CLIENT_ID)
+        email = idinfo['email']
+
+        # Check if the user with this email already exists in your database
+        # If not, create a new user and save it to your database
+
+        # Generate a JWT token for the user
+        jwt_token = jwt.encode({'email': email}, settings.SECRET_KEY)
+
+        return Response({'token': jwt_token})
+    except ValueError:
+        return Response(status=400)
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):

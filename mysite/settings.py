@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     # OAuth
     'oauth2_provider',
     'social_django',
-    'drf_social_oauth2',
+    'rest_framework_social_oauth2',
 ]
 
 REST_FRAMEWORK = {

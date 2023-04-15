@@ -22,16 +22,18 @@ import jwt
 @api_view(['POST'])
 def google_callback(request):
     token = request.data.get('token')
+    print(f'token: {token}')  # Add this line to log the token value
 
     try:
-        idinfo = id_token.verify_oauth2_token(token, requests.Request(), settings.GOOGLE_CLIENT_ID)
+        idinfo = id_token.verify_oauth2_token(token, requests.Request(), "567487559274-4kmrb337m167lvpsc9j7ja89lm1rkek9.apps.googleusercontent.com")
+        print("idinfo is: ",idinfo)
         email = idinfo['email']
 
         # Check if the user with this email already exists in your database
         # If not, create a new user and save it to your database
 
         # Generate a JWT token for the user
-        jwt_token = jwt.encode({'email': email}, settings.SECRET_KEY)
+        jwt_token = jwt.encode({'email': email}, 'django-insecure-rc^*w^w&6g9_(uvx#6s*bnt!w)l0rdi%!l7mv#y%uc&x%wo5pk')
 
         return Response({'token': jwt_token})
     except ValueError:
@@ -190,3 +192,4 @@ def delete_review(request):
         except: 
             message = {"detail": "something went wrong:( try later"}
             return Response(message, status=status.HTTP_400_BAD_REQUEST)
+

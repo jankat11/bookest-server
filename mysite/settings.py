@@ -63,6 +63,9 @@ REST_FRAMEWORK = {
 
 AUTHENTICATION_BACKENDS = (
 
+    # Facebook OAuth2
+    'social_core.backends.facebook.FacebookAppOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
     # Google OAuth2
     'social_core.backends.google.GoogleOAuth2',
 
@@ -73,8 +76,18 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+SOCIAL_AUTH_FACEBOOK_KEY = '742581190893537'
+SOCIAL_AUTH_FACEBOOK_SECRET = '2c4614c7f659c37e4857b5fa39bb4a6b'
+
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id, name, email'
+}
+
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "567487559274-4kmrb337m167lvpsc9j7ja89lm1rkek9.apps.googleusercontent.com"
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
+
+
 SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'https://bookest-server.up.railway.app/auth/convert-token'
 
 # Define SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE to get extra permissions from Google.

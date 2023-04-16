@@ -10,10 +10,7 @@ from rest_framework import status
 from .serializers import *
 from .models import *
 from .helpers import *
-
-
 from django.conf import settings
-
 
 
 @api_view(['POST'])
@@ -42,7 +39,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         
         for key, value in serializer.items():
             data[key] = value
-        print("password is ", data["password"])
         return data
 
 
@@ -59,8 +55,7 @@ def register(request):
             return Response(message, status=status.HTTP_400_BAD_REQUEST)
         try:
             user = User.objects.create(
-                username=data["email"],
-                email=data["email"],
+                username=data["username"],
                 password=make_password(data["password"])              
             )
             serializer = UserSerializerWithToken(user, many=False)

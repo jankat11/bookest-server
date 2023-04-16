@@ -1,4 +1,3 @@
-from rest_framework.decorators import api_view
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.decorators import api_view, permission_classes
@@ -11,14 +10,11 @@ from rest_framework import status
 from .serializers import *
 from .models import *
 from .helpers import *
-import google.auth
-from google.oauth2 import id_token
-import requests
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+
+
 from django.conf import settings
-import jwt
-import json
+
+
 
 @api_view(['POST'])
 def google_callback(request):
@@ -28,35 +24,15 @@ def google_callback(request):
             user_data = get_user(token)
             print("user_data is: ", user_data)
             if user_data and user_data['aud'] == "567487559274-4kmrb337m167lvpsc9j7ja89lm1rkek9.apps.googleusercontent.com":
-                # User is authenticated, create JWT token
-
-                user_id = user_data['sub']
                 username = user_data['email']
                 email = user_data['email']
-              
-                print("username is: ", username, "email is: ", email)
                 user, _ = User.objects.get_or_create(username=username,email=email)
-                  
-                  
                 serializer = UserSerializerWithToken(user, many=False)
                 return Response(serializer.data)
-                
             else:
                 return JsonResponse({'error': 'Invalid token or client ID'})
         else:
             return JsonResponse({'error': 'Token not provided'})
-
-
-
-      
-
-def get_user(token):
-    response = requests.get(f"https://www.googleapis.com/oauth2/v3/tokeninfo?access_token={token}")
-    if response.status_code == 200:
-        user_data = json.loads(response.content)
-        return user_data
-    else:
-        return None
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):

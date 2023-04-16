@@ -1,3 +1,6 @@
+import requests
+import json
+
 def get_book_credentials(data):
     google_id = data["googleId"]
     isbn = data["isbn"]
@@ -45,3 +48,12 @@ def get_book_on_notes(data):
         "title":title, 
         "cover":no_cover, 
     }
+
+
+def get_user(token):
+    response = requests.get(f"https://www.googleapis.com/oauth2/v3/tokeninfo?access_token={token}")
+    if response.status_code == 200:
+        user_data = json.loads(response.content)
+        return user_data
+    else:
+        return None

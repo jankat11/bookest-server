@@ -110,7 +110,6 @@ def my_books(request):
     except:
         return JsonResponse({
             "sorry": "unsuccessful",
-            
         })
 
 

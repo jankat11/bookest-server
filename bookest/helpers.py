@@ -1,5 +1,11 @@
 import requests
 import json
+import os
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
+NYT_URL = os.getenv("NYT_URL")
+NYT_API_KEY = os.getenv("NYT_API_KEY")
+
 
 def get_book_credentials(data):
     google_id = data["googleId"]
@@ -60,8 +66,7 @@ def get_user(token):
     
 
 def get_books_genre(genre):
-    url = f"https://api.nytimes.com/svc/books/v3/lists/current/{genre}.json?api-key=LqUHIwL9cMprnPyH5reZJcaOH0In51Am"
-    print(url)
+    url = f"{NYT_URL}/{genre}.json?api-key={NYT_API_KEY}"
+    print("url is: ")
     books = requests.get(url).json()
-    print(books)
     return books

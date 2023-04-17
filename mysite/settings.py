@@ -170,6 +170,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
     "https://bookest.netlify.app"
+    "https://bookest.info"
 ]
 
 

@@ -168,13 +168,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-""" CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://localhost:5174",
+CORS_ALLOWED_ORIGIN_REGEXES = [
     "https://bookest.netlify.app"
-] """
-
-CORS_ALLOW_ALL_ORIGINS = True
+]
 
 
 from datetime import timedelta

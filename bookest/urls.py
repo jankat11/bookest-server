@@ -12,4 +12,5 @@ urlpatterns = [
     path("users/myreviews/", views.my_reviews),
     path("users/deletenote/", views.delete_review),
     path('auth/google/callback/', views.google_callback),
+    path('users/getbooks/<str:genre>', views.get_books),
 ]

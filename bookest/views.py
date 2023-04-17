@@ -46,6 +46,12 @@ class MyToken(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
+@api_view(["GET"])
+def get_books(request, genre): 
+    books = get_books_genre(genre)
+    return JsonResponse(books)     
+
+
 @api_view(["POST"])
 def register(request):
     if request.method == "POST":

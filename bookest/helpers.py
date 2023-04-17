@@ -57,3 +57,11 @@ def get_user(token):
         return user_data
     else:
         return None
+    
+
+def get_books_genre(genre):
+    url = f"https://api.nytimes.com/svc/books/v3/lists/current/{genre}.json?api-key=LqUHIwL9cMprnPyH5reZJcaOH0In51Am"
+    print(url)
+    books = requests.get(url).json()
+    print(books)
+    return books

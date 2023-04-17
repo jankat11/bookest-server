@@ -13,7 +13,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 import dj_database_url
 from pathlib import Path
-
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-rc^*w^w&6g9_(uvx#6s*bnt!w)l0rdi%!l7mv#y%uc&x%wo5pk'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -55,11 +56,10 @@ REST_FRAMEWORK = {
 
 
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "567487559274-4kmrb337m167lvpsc9j7ja89lm1rkek9.apps.googleusercontent.com"
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY")
 
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'https://bookest-server.up.railway.app/auth/convert-token'
+
 
 # Define SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE to get extra permissions from Google.
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
@@ -117,7 +117,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
     }
 } """
 
-DATABASE_URL = "postgresql://postgres:Qsiw96RaEBSWnrj9Hc9j@containers-us-west-19.railway.app:6838/railway"
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 DATABASES = {
     "default": dj_database_url.config(default=DATABASE_URL),

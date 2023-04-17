@@ -16,21 +16,21 @@ from django.conf import settings
 @api_view(['POST'])
 def google_callback(request):
     if request.method == 'POST':
-        token = request.data.get('token')
-        if token:
+        try:
+            token = request.data.get('token')
             user_data = get_user(token)
-            print("user_data is: ", user_data)
-            if user_data and user_data['aud'] == "567487559274-4kmrb337m167lvpsc9j7ja89lm1rkek9.apps.googleusercontent.com":
+            print("hello")
+            if user_data and user_data['aud'] == settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY:
+                print("googleid is: ", settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY, "user aud is: ", user_data['aud'])
                 username = user_data['email']
                 email = user_data['email']
                 user, _ = User.objects.get_or_create(username=username,email=email)
                 serializer = UserSerializerWithToken(user, many=False)
                 return Response(serializer.data)
-            else:
-                return JsonResponse({'error': 'Invalid token or client ID'})
-        else:
-            return JsonResponse({'error': 'Token not provided'})
-
+        except:
+            message = {"detail": "Invalid token or client ID"}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
+       
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):

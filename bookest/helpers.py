@@ -5,6 +5,7 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 NYT_URL = os.getenv("NYT_URL")
 NYT_API_KEY = os.getenv("NYT_API_KEY")
+OAUTH_GOOGLE = os.getenv("OAUTH_GOOGLE")
 
 
 def get_book_credentials(data):
@@ -57,7 +58,7 @@ def get_book_on_notes(data):
 
 
 def get_user(token):
-    response = requests.get(f"https://www.googleapis.com/oauth2/v3/tokeninfo?access_token={token}")
+    response = requests.get(f"{OAUTH_GOOGLE}{token}")
     if response.status_code == 200:
         user_data = json.loads(response.content)
         return user_data
@@ -67,6 +68,5 @@ def get_user(token):
 
 def get_books_genre(genre):
     url = f"{NYT_URL}/{genre}.json?api-key={NYT_API_KEY}"
-    print("url is: ")
     books = requests.get(url).json()
     return books

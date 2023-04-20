@@ -28,4 +28,4 @@ jobs:
         run: npm install -g @railway/cli
 
       - name: Deploy to Production
-        run: railway deploy
+        run: railway up --build

@@ -10,7 +10,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Run Django unit tests
       env: 
-        SECRET_KEY: t)pb#ukgqv1@01)^knhcfr%gh3)kx%ueb-536i#7qlka**^me- #dummy key for testing
+        SECRET_KEY: ${{ secrets.TESTSECRETKEY }} #dummy key for testing
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt

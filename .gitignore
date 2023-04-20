@@ -1,1 +1,22 @@
 .env
+# Django-related files
+*.pyc
+*.pyo
+__pycache__/
+*.egg-info/
+dist/
+build/
+media/
+
+# Database-related files
+db.sqlite3
+*.sqlite3
+
+# Other generated files
+*.log
+*.swp
+*.swo
+*.bak
+*.pyc
+*.pyo
+*.class

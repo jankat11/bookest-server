@@ -3,8 +3,8 @@ from . import views
 
 
 urlpatterns = [
-    path('users/login/', views.MyToken.as_view()),
-    path('users/register/', views.register),
+    path('users/login/', views.MyToken.as_view(), name="login"),
+    path('users/register/', views.register, name="register"),
     path('users/mybooks/', views.my_books),
     path("users/addbook/", views.add_book),
     path("users/removeBook/<str:book_id>", views.remove_from_bookshelf),

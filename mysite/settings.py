@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+from datetime import timedelta
 import os
 import dj_database_url
 from pathlib import Path
@@ -55,10 +56,7 @@ REST_FRAMEWORK = {
 }
 
 
-
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY")
-
-
 
 
 # Define SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE to get extra permissions from Google.
@@ -66,8 +64,6 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://www.googleapis.com/auth/userinfo.email',
     'https://www.googleapis.com/auth/userinfo.profile',
 ]
-
-
 
 
 MIDDLEWARE = [
@@ -124,7 +120,6 @@ DATABASES = {
 }
 
 
- 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -173,8 +168,6 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
     "https://bookest.info"
 ]
 
-
-from datetime import timedelta
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=30),

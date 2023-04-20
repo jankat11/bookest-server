@@ -10,14 +10,14 @@ class Book(models.Model):
 
     def __str__(self) -> str:
         return self.title
-    
-    def serialize(self): 
+
+    def serialize(self):
         return {
             "title": self.title,
             "id": self.google_id,
             "no_cover": self.no_cover
         }
-        
+
 
 class Review(models.Model):
     _id = models.CharField(max_length=200)
@@ -28,15 +28,21 @@ class Review(models.Model):
         Book, on_delete=models.CASCADE, related_name="reviews")
     time = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name_plural = "Notes on books"
+
     def __str__(self) -> str:
         return self.content
+
+    def is_valid(self):
+        return len(self.content) <= 2500
 
     def serialize(self):
         return {
             "_id": self._id,
             "content": self.content,
             "on_book": self.on_book.google_id,
-            "time": self.time.strftime("%b %Y") 
+            "time": self.time.strftime("%b %Y")
         }
 
 
@@ -63,6 +69,9 @@ class OrderWillBeRead(models.Model):
     bookshelf = models.ForeignKey(BookShelf, on_delete=models.CASCADE)
     date_time = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name_plural = "Users WillbeRead Shelfs Ordered"
+
     def __str__(self) -> str:
         return f"{self.bookshelf.owner} add {self.book} on {self.date_time}"
 
@@ -71,6 +80,9 @@ class OrderHasBeenRead(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     bookshelf = models.ForeignKey(BookShelf, on_delete=models.CASCADE)
     date_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Users HasBeenRead Shelfs Ordered"
 
     def __str__(self) -> str:
         return f"{self.bookshelf.owner} add {self.book} on {self.date_time}"

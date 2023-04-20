@@ -65,6 +65,6 @@ class BookestTestCase(TestCase):
         url = reverse("register")
         userdata = {"username": "randomOsman", "password": "12345"}
         response = self.client.post(url, userdata)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(response['content-type'], 'application/json')
 

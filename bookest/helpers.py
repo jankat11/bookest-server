@@ -41,12 +41,18 @@ def get_review_credentials(data):
     content = data["content"]
     _id = data["_id"]
     return {
-        "id": google_id,
-        "isbn": isbn,
-        "title": title,
-        "cover": no_cover,
-        "content": content,
-        "_id": _id
+        "book_data":
+        {
+            "google_id": google_id,
+            "isbn": isbn,
+            "title": title,
+            "no_cover": no_cover,
+        },
+        "content_data":
+        {
+            "content": content,
+            "_id": _id
+        }
     }
 
 
@@ -56,10 +62,10 @@ def get_book_on_notes(data):
     title = data["title"]
     no_cover = data["noCover"]
     return {
-        "id": google_id,
+        "google_id": google_id,
         "isbn": isbn,
         "title": title,
-        "cover": no_cover,
+        "no_cover": no_cover,
     }
 
 

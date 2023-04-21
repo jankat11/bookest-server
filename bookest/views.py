@@ -147,8 +147,7 @@ def my_reviews(request):
         try:
             user = request.user
             data = get_book_on_notes(request.data)
-            book, _ = Book.objects.get_or_create(
-                google_id=data["id"], isbn=data["isbn"], title=data["title"], no_cover=data["cover"])
+            book, _ = Book.objects.get_or_create(**data)  
             reviews = Review.objects.all().filter(owner=user, on_book=book)
             reviews_sorted = sorted(reviews,
                                     key=lambda review: review.time, reverse=True)
@@ -169,10 +168,11 @@ def add_review(request):
         try:
             user = request.user
             data = get_review_credentials(request.data)
-            book, _ = Book.objects.get_or_create(
-                google_id=data["id"], isbn=data["isbn"], title=data["title"], no_cover=data["cover"])
-            content = data["content"].replace("\n", "<br>")
-            _id = data["_id"]
+            book_data = data["book_data"]
+            content_data = data["content_data"]
+            book, _ = Book.objects.get_or_create(**book_data)
+            content = content_data["content"].replace("\n", "<br>")
+            _id = content_data["_id"]
             Review.objects.create(owner=user, on_book=book,
                                   content=content, _id=_id)
             return JsonResponse({

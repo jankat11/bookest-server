@@ -17,7 +17,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
         serializer = UserSerializerWithToken(self.user).data
-        
+
         for key, value in serializer.items():
             data[key] = value
         return data
@@ -36,18 +36,22 @@ def google_callback(request):
             if user_data and user_data['aud'] == settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY:
                 username = user_data['email']
                 email = user_data['email']
-                user, _ = User.objects.get_or_create(username=username,email=email)
+                user, _ = User.objects.get_or_create(
+                    username=username, email=email)
                 serializer = UserSerializerWithToken(user, many=False)
                 return Response(serializer.data)
+            else:
+                message = {"detail": "Invalid token or client ID"}
+                return Response(message, status=status.HTTP_400_BAD_REQUEST)
         except:
             message = {"detail": "Invalid token or client ID"}
             return Response(message, status=status.HTTP_400_BAD_REQUEST)
-       
+
 
 @api_view(["GET"])
-def get_books(request, genre): 
+def get_books(request, genre):
     books = get_books_genre(genre)
-    return JsonResponse(books)     
+    return JsonResponse(books)
 
 
 @api_view(["POST"])
@@ -60,7 +64,7 @@ def register(request):
         try:
             user = User.objects.create(
                 username=data["username"],
-                password=make_password(data["password"])              
+                password=make_password(data["password"])
             )
             serializer = UserSerializerWithToken(user, many=False)
             return Response(serializer.data)
@@ -108,8 +112,8 @@ def my_books(request):
         users_reviews = sorted(users_reviews, key=lambda review: review.time)
         noted_books = [review.on_book.serialize() for review in users_reviews]
         return JsonResponse({
-          "mainShelf":  serialized,
-          "noted_books": noted_books
+            "mainShelf":  serialized,
+            "noted_books": noted_books
         })
     except:
         return JsonResponse({
@@ -147,7 +151,8 @@ def my_reviews(request):
             reviews = Review.objects.all().filter(owner=user, on_book=book)
             reviews_sorted = sorted(reviews,
                                     key=lambda review: review.time, reverse=True)
-            reviews_serialized = [review.serialize() for review in reviews_sorted]
+            reviews_serialized = [review.serialize()
+                                  for review in reviews_sorted]
             return JsonResponse({
                 "reviews": reviews_serialized
             })
@@ -167,7 +172,8 @@ def add_review(request):
                 google_id=data["id"], isbn=data["isbn"], title=data["title"], no_cover=data["cover"])
             content = data["content"].replace("\n", "<br>")
             _id = data["_id"]
-            Review.objects.create(owner=user, on_book=book, content=content, _id=_id)
+            Review.objects.create(owner=user, on_book=book,
+                                  content=content, _id=_id)
             return JsonResponse({
                 "result":  "your note was successfully added"
             })
@@ -187,13 +193,6 @@ def delete_review(request):
             return JsonResponse({
                 "success": "the note deleted successfully"
             })
-        except: 
+        except:
             message = {"detail": "something went wrong:( try later"}
             return Response(message, status=status.HTTP_400_BAD_REQUEST)
-
-
-
-
-
-
-

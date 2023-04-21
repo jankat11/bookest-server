@@ -21,10 +21,9 @@ class BookestTestCase(TestCase):
 
         Review.objects.create(
             owner=reader, _id="1234", on_book=book1, content=ascii_lowercase*50)
-        
+
         Review.objects.create(
             owner=reader, _id="5678", on_book=book2, content=ascii_lowercase*100)
-        
 
     def test_user_model_exists(self):
         user = User.objects.get(username="randomOsman")
@@ -38,11 +37,11 @@ class BookestTestCase(TestCase):
         user = User.objects.get(username="randomOsman")
         self.assertEqual(user.book_shelf, BookShelf.objects.get(owner=user))
 
-    def test_is_valid_review(self): 
+    def test_is_valid_review(self):
         review = Review.objects.get(_id="1234")
         self.assertTrue(review.is_valid())
 
-    def test_is_invalid_review(self): 
+    def test_is_invalid_review(self):
         review = Review.objects.get(_id="5678")
         self.assertFalse(review.is_valid())
 
@@ -68,3 +67,18 @@ class BookestTestCase(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response['content-type'], 'application/json')
 
+    def test_is_valid_login_method(self):
+        url_register = reverse("register")
+        userdata = {"username": "randomNewUser", "password": "12345"}
+        self.client.post(url_register, userdata)
+        url_login = reverse("login")
+        response = self.client.post(url_login, userdata)
+        self.assertEqual(response.status_code, 200)
+
+    def test_is_wrong_google_auth_method(self):
+        response = self.client.get("/api/auth/google/callback/")
+        self.assertEqual(response.status_code, 405)
+
+    def test_is_invalid_google_auth(self):
+        response = self.client.post("/api/auth/google/callback/", {"token": "dummy"})
+        self.assertEqual(response.status_code, 400)

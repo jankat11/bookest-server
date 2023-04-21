@@ -78,25 +78,26 @@ def register(request):
 def add_book(request):
     if request.method == "POST":
         data = get_book_credentials(request.data)
-        book, _ = Book.objects.get_or_create(
-            google_id=data["id"], isbn=data["isbn"], title=data["title"], no_cover=data["cover"])
+        book_data = data["book_data"]
+        shelf_data = data["shelf_data"]
+        book, _ = Book.objects.get_or_create(**book_data)
         book_shelf, _ = BookShelf.objects.get_or_create(owner=request.user)
         try:
-            check = book_shelf.serialize()[data["shelf"]].get(id=book.id)
+            check = book_shelf.serialize()[shelf_data["shelf"]].get(id=book.id)
             if check is not None:
                 message = {
-                    "detail": f"This book is already in {data['shelf']} shelf"}
+                    "detail": f"This book is already in {shelf_data['shelf']} shelf"}
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
         except:
             pass
         try:
-            check = book_shelf.serialize()[data["other_shelf"]].get(id=book.id)
+            check = book_shelf.serialize()[shelf_data["other_shelf"]].get(id=book.id)
             if check is not None:
-                book_shelf.serialize()[data["other_shelf"]].remove(book)
+                book_shelf.serialize()[shelf_data["other_shelf"]].remove(book)
                 book_shelf.save()
         except:
             pass
-        book_shelf.serialize()[data["shelf"]].add(book)
+        book_shelf.serialize()[shelf_data["shelf"]].add(book)
         book_shelf.save()
         serialized = book_serializer(book_shelf)
         return JsonResponse(serialized)

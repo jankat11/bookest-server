@@ -18,12 +18,18 @@ def get_book_credentials(data):
     shelf = "will_be_read" if will_be_read else "has_been_read"
     other_shelf = "will_be_read" if has_been_read else "has_been_read"
     return {
-        "id":google_id,
-        "isbn":isbn, 
-        "title":title, 
-        "cover":no_cover, 
-        "shelf":shelf, 
-        "other_shelf": other_shelf
+        "book_data":
+        {
+            "google_id": google_id,
+            "isbn": isbn,
+            "title": title,
+            "no_cover": no_cover,
+        },
+        "shelf_data":
+        {
+            "shelf": shelf,
+            "other_shelf": other_shelf
+        }
     }
 
 
@@ -35,12 +41,12 @@ def get_review_credentials(data):
     content = data["content"]
     _id = data["_id"]
     return {
-        "id":google_id,
-        "isbn":isbn, 
-        "title":title, 
-        "cover":no_cover, 
+        "id": google_id,
+        "isbn": isbn,
+        "title": title,
+        "cover": no_cover,
         "content": content,
-        "_id" : _id
+        "_id": _id
     }
 
 
@@ -50,10 +56,10 @@ def get_book_on_notes(data):
     title = data["title"]
     no_cover = data["noCover"]
     return {
-        "id":google_id,
-        "isbn":isbn, 
-        "title":title, 
-        "cover":no_cover, 
+        "id": google_id,
+        "isbn": isbn,
+        "title": title,
+        "cover": no_cover,
     }
 
 
@@ -64,7 +70,7 @@ def get_user(token):
         return user_data
     else:
         return None
-    
+
 
 def get_books_genre(genre):
     url = f"{NYT_URL}/{genre}.json?api-key={NYT_API_KEY}"

@@ -1,3 +1,4 @@
-## Django Template
+# bookest-react
+[bookest.info](https://bookest.info/)
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/GB6Eki?referralCode=U5zXSw)
+A book library site i developed with my own idea. This repo is backend part with django.

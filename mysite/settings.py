@@ -113,7 +113,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
     }
 } """
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+""" DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DATABASE_URL:
   DATABASES = {
@@ -125,7 +125,7 @@ else:
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
+} """
 
 
 # Password validation

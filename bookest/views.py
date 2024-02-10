@@ -30,6 +30,7 @@ class MyToken(TokenObtainPairView):
 @api_view(['POST'])
 def google_callback(request):
     if request.method == 'POST':
+        print("from google")
         try:
             token = request.data.get('token')
             user_data = get_user(token)
@@ -39,12 +40,15 @@ def google_callback(request):
                 user, _ = User.objects.get_or_create(
                     username=username, email=email)
                 serializer = UserSerializerWithToken(user, many=False)
+                print("from google okk")
                 return Response(serializer.data)
             else:
                 message = {"detail": "Invalid token or client ID"}
+                print("from google else")
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
         except:
             message = {"detail": "Invalid token or client ID"}
+            print("from google except")
             return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 

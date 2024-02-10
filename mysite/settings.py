@@ -102,7 +102,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-""" DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.environ["PGDATABASE"],
@@ -111,7 +111,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
         'HOST': os.environ["PGHOST"],
         'PORT': os.environ["PGPORT"],
     }
-} """
+}
 
 """ DATABASE_URL = os.getenv("DATABASE_URL")
 

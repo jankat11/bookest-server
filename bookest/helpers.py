@@ -15,8 +15,8 @@ def get_book_credentials(data):
     no_cover = data["noCover"]
     will_be_read = data["willBeRead"]
     has_been_read = data["hasBeenRead"]
-    shelf = "will_be_read" if will_be_read else "has_been_read"
-    other_shelf = "will_be_read" if has_been_read else "has_been_read"
+    shelf = "to_be_read" if will_be_read else "completed_books"
+    other_shelf = "to_be_read" if has_been_read else "completed_books"
     return {
         "book_data":
         {

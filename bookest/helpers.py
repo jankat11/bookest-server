@@ -8,7 +8,7 @@ NYT_API_KEY = os.getenv("NYT_API_KEY")
 OAUTH_GOOGLE = os.getenv("OAUTH_GOOGLE")
 
 
-def get_book_credentials(data):
+def get_book_credentials(data): 
     google_id = data["googleId"]
     isbn = data["isbn"]
     title = data["title"]

@@ -11,6 +11,6 @@ urlpatterns = [
     path("users/addreview/", views.add_review),
     path("users/myreviews/", views.my_reviews),
     path("users/deletenote/", views.delete_review),
-    path('auth/google/callback/', views.google_callback),
+    # path('auth/google/callback/', views.google_callback),
     path('users/getbooks/<str:genre>', views.get_books),
 ]

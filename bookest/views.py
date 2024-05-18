@@ -26,7 +26,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class MyToken(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-# if reactivate google oauth uncomment here and settings.py relavant sections
+# if reactivate google oauth uncomment here, urls.py and settings.py relavant sections
 
 """ @api_view(['POST'])
 def google_callback(request):

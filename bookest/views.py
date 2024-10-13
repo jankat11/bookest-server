@@ -44,7 +44,6 @@ def google_callback(request):
                 print("from google okk")
                 return Response(serializer.data)
             else:
-                print("key is", settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY)
                 message = {"detail": "Invalid token or client ID"}
                 print("from google else")
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)

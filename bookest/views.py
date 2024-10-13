@@ -28,7 +28,7 @@ class MyToken(TokenObtainPairView):
 
 # if reactivate google oauth uncomment here, urls.py and settings.py relavant sections
 
-""" @api_view(['POST'])
+@api_view(['POST'])
 def google_callback(request):
     if request.method == 'POST':
         print("from google")
@@ -44,13 +44,14 @@ def google_callback(request):
                 print("from google okk")
                 return Response(serializer.data)
             else:
+                print("key is", settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY)
                 message = {"detail": "Invalid token or client ID"}
                 print("from google else")
                 return Response(message, status=status.HTTP_400_BAD_REQUEST)
         except:
             message = {"detail": "Invalid token or client ID"}
             print("from google except")
-            return Response(message, status=status.HTTP_400_BAD_REQUEST) """
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["GET"])
